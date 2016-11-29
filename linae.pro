@@ -13,6 +13,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        MainWindow.cpp
+        MainWindow.cpp \
+    CommandLineInput.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += MainWindow.h \
+    CommandLineInput.h
