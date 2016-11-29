@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+class QTextEdit;
+
 namespace linae {
 
 class MainWindow : public QMainWindow {
@@ -12,8 +14,15 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private:
+public slots:
+    /// Opens file dialog for empty file path.
+    void openFile(const QString& filePath = QString());
 
+private:
+    void setUpFileMenu();
+    void setUpViewer();
+
+    QTextEdit *textView;
 };
 
 } // namespace linae
