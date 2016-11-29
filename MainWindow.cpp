@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QTextEdit>
 #include <QApplication>
+#include <QToolBar>
 
 namespace linae {
 
@@ -14,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     setUpFileMenu();
     setUpViewer();
+    setUpToolbar();
 
     setCentralWidget(textView);
     setWindowTitle(tr("linae"));
@@ -39,6 +41,10 @@ void MainWindow::openFile(const QString &filePath) {
     }
 }
 
+void MainWindow::noop() {
+
+}
+
 void MainWindow::setUpFileMenu() {
     QMenu *fileMenu = new QMenu(tr("&File"), this);
     fileMenu->addAction(tr("&Open"), this, SLOT(openFile()), QKeySequence::Open);
@@ -56,6 +62,27 @@ void MainWindow::setUpViewer() {
     textView = new QTextEdit(this);
     textView->setFont(font);
     textView->setPlainText("Open log...");
+    textView->setReadOnly(true);
+    textView->setTextInteractionFlags(textView->textInteractionFlags() | Qt::TextSelectableByKeyboard);
+}
+
+void MainWindow::setUpToolbar()
+{
+    QToolBar *fileToolbar = addToolBar(tr("File actions"));
+    fileToolbar->addAction(tr("&Open"), this, SLOT(openFile()));
+
+    QToolBar *filtering = addToolBar(tr("Filtering actions"));
+    filtering->addAction(tr("Show"), this, SLOT(noop()));
+    filtering->addAction(tr("Leave"), this, SLOT(noop()));
+    filtering->addAction(tr("Hide"), this, SLOT(noop()));
+    filtering->addAction(tr("Reset"), this, SLOT(noop()));
+
+    QToolBar *marking = addToolBar(tr("Marking actions"));
+    marking->addAction(tr("Color 1"), this, SLOT(noop()));
+    marking->addAction(tr("Color 2"), this, SLOT(noop()));
+    marking->addAction(tr("Color 3"), this, SLOT(noop()));
+    marking->addAction(tr("Color 4"), this, SLOT(noop()));
+    marking->addAction(tr("Toggle bookmark"), this, SLOT(noop()));
 }
 
 } // namespace linae
