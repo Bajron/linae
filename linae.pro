@@ -14,7 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    CommandLineInput.cpp
+    CommandLineInput.cpp \
+    Highlighter.cpp \
+    SimpleStyleMarker.cpp
 
 HEADERS  += MainWindow.h \
-    CommandLineInput.h
+    CommandLineInput.h \
+    Highlighter.h \
+    SimpleStyleMarker.h

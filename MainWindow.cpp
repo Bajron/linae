@@ -1,4 +1,6 @@
+#include "Highlighter.h"
 #include "MainWindow.h"
+#include "SimpleStyleMarker.h"
 
 #include <QMenuBar>
 #include <QMenu>
@@ -11,10 +13,15 @@
 namespace linae {
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent), textView(nullptr)
+    QMainWindow(parent),
+    textView(nullptr),
+    styleMarker(nullptr)
 {
-    setUpFileMenu();
     setUpViewer();
+    setUpHighlighter();
+    setUpStyleMarker();
+
+    setUpFileMenu();
     setUpToolbar();
 
     setCentralWidget(textView);
@@ -78,11 +85,21 @@ void MainWindow::setUpToolbar()
     filtering->addAction(tr("Reset"), this, SLOT(noop()));
 
     QToolBar *marking = addToolBar(tr("Marking actions"));
-    marking->addAction(tr("Color 1"), this, SLOT(noop()));
-    marking->addAction(tr("Color 2"), this, SLOT(noop()));
-    marking->addAction(tr("Color 3"), this, SLOT(noop()));
-    marking->addAction(tr("Color 4"), this, SLOT(noop()));
+    marking->addAction(tr("Color 1"), styleMarker, SLOT(Style0Selected()));
+    marking->addAction(tr("Color 2"), styleMarker, SLOT(Style1Selected()));
+    marking->addAction(tr("Color 3"), styleMarker, SLOT(Style2Selected()));
+    marking->addAction(tr("Color 4"), styleMarker, SLOT(Style3Selected()));
     marking->addAction(tr("Toggle bookmark"), this, SLOT(noop()));
+}
+
+void MainWindow::setUpHighlighter() {
+    highlighter = new Highlighter(textView->document());
+}
+
+void MainWindow::setUpStyleMarker() {
+    styleMarker = new SimpleStyleMarker(this);
+    styleMarker->setHighlighter(highlighter);
+    styleMarker->observe(textView);
 }
 
 } // namespace linae

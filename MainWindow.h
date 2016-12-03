@@ -7,6 +7,9 @@ class QTextEdit;
 
 namespace linae {
 
+class Highlighter;
+class SimpleStyleMarker;
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
@@ -26,6 +29,12 @@ private:
     void setUpToolbar();
 
     QTextEdit *textView;
+
+    void setUpHighlighter();
+    void setUpStyleMarker();
+
+    Highlighter* highlighter;
+    SimpleStyleMarker* styleMarker;
 };
 
 } // namespace linae
