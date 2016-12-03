@@ -23,10 +23,19 @@ public slots:
 
     void noop();
 
+    void filterSelected();
+    void resetFiltering();
+protected:
+    void setOriginalContent(const QString& original);
+    void setContent(const QString& original);
+
 private:
     void setUpFileMenu();
     void setUpViewer();
     void setUpToolbar();
+
+    QString original;
+    QString content;
 
     QTextEdit *textView;
 

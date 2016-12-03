@@ -9,6 +9,8 @@
 #include <QTextEdit>
 #include <QApplication>
 #include <QToolBar>
+#include <QTextStream>
+#include <QDebug>
 
 namespace linae {
 
@@ -43,13 +45,71 @@ void MainWindow::openFile(const QString &filePath) {
         QFile file(fileToOpen);
         if (file.open(QFile::ReadOnly | QFile::Text)) {
             setWindowTitle(tr("linae") + tr(" -- ") + fileToOpen);
-            textView->setText(file.readAll());
+            setOriginalContent(file.readAll());
         }
     }
 }
 
 void MainWindow::noop() {
 
+}
+
+void MainWindow::filterSelected() {
+    QString selected = textView->textCursor().selectedText();
+
+    if (selected.isNull() || selected.isEmpty()) {
+        qDebug() << "Selection is empty for filtering.";
+        return;
+    }
+
+    int cur = textView->textCursor().selectionStart();
+    int newCur = 0;
+
+    qDebug() << "Previous cursor was " << cur;
+
+    QTextStream stream(&content, QIODevice::ReadOnly);
+    QString filtered;
+    QTextStream out(&filtered);
+
+    auto inPos = stream.pos();
+    QString line = stream.readLine();
+
+    while (!line.isEmpty()) {
+        if (line.contains(selected)) {
+            out << line << '\n';
+        }
+
+        if (inPos <= cur && cur < stream.pos()) {
+            out.flush();
+            auto outPos = filtered.size() - line.size();
+
+            qDebug() << inPos << " < " << cur << " < " << stream.pos();
+            newCur = outPos + cur - inPos - 1;
+            qDebug() << "New cursor found " << newCur << " outPos: " << outPos;
+        }
+
+        inPos = stream.pos();
+        line = stream.readLine();
+    }
+    setContent(*out.string());
+
+    auto c = textView->textCursor();
+    c.setPosition(newCur);
+    textView->setTextCursor(c);
+}
+
+void MainWindow::resetFiltering() {
+    setContent(original);
+}
+
+void MainWindow::setOriginalContent(const QString &c) {
+    original = c;
+    setContent(original);
+}
+
+void MainWindow::setContent(const QString &c) {
+    content = c;
+    textView->setText(content);
 }
 
 void MainWindow::setUpFileMenu() {
@@ -73,16 +133,20 @@ void MainWindow::setUpViewer() {
     textView->setTextInteractionFlags(textView->textInteractionFlags() | Qt::TextSelectableByKeyboard);
 }
 
-void MainWindow::setUpToolbar()
-{
+void MainWindow::setUpToolbar() {
     QToolBar *fileToolbar = addToolBar(tr("File actions"));
-    fileToolbar->addAction(tr("&Open"), this, SLOT(openFile()));
+    fileToolbar->addAction(tr("&Open"), this, SLOT(openFile()))
+            ->setShortcut(QKeySequence::Open);
 
     QToolBar *filtering = addToolBar(tr("Filtering actions"));
-    filtering->addAction(tr("Show"), this, SLOT(noop()));
-    filtering->addAction(tr("Leave"), this, SLOT(noop()));
-    filtering->addAction(tr("Hide"), this, SLOT(noop()));
-    filtering->addAction(tr("Reset"), this, SLOT(noop()));
+    filtering->addAction(tr("Show"), this, SLOT(noop()))
+            ->setShortcut(QKeySequence("Ctrl+Alt+G"));
+    filtering->addAction(tr("Leave"), this, SLOT(filterSelected()))
+            ->setShortcut(QKeySequence("Ctrl+Alt+H"));
+    filtering->addAction(tr("Hide"), this, SLOT(noop()))
+            ->setShortcut(QKeySequence("Ctrl+Alt+J"));
+    filtering->addAction(tr("Reset"), this, SLOT(resetFiltering()))
+            ->setShortcut(QKeySequence("Ctrl+Alt+0"));
 
     QToolBar *marking = addToolBar(tr("Marking actions"));
     marking->addAction(tr("Color 1"), styleMarker, SLOT(Style0Selected()));
