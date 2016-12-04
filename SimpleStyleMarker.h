@@ -23,12 +23,14 @@ public:
 signals:
 
 public slots:
-    void Style0Selected() { return StyleSelected(0); }
-    void Style1Selected() { return StyleSelected(1); }
-    void Style2Selected() { return StyleSelected(2); }
-    void Style3Selected() { return StyleSelected(3); }
+    void style0Selected() { return styleSelected(0); }
+    void style1Selected() { return styleSelected(1); }
+    void style2Selected() { return styleSelected(2); }
+    void style3Selected() { return styleSelected(3); }
 
-    void StyleSelected(int style);
+    void selected();
+
+    void styleSelected(int style);
 
 private:
     Highlighter* highlighter;

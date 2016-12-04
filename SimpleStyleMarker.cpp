@@ -21,7 +21,11 @@ void SimpleStyleMarker::observe(QTextEdit *te) {
     observedText = te;
 }
 
-void SimpleStyleMarker::StyleSelected(int style) {
+void SimpleStyleMarker::selected() {
+    highlighter->setSelected(observedText->textCursor().selectedText());
+}
+
+void SimpleStyleMarker::styleSelected(int style) {
     if (!highlighter) {
         qWarning() << "Style selected used when no highlighter is provided.";
         return;

@@ -16,9 +16,11 @@ SOURCES += main.cpp\
         MainWindow.cpp \
     CommandLineInput.cpp \
     Highlighter.cpp \
-    SimpleStyleMarker.cpp
+    SimpleStyleMarker.cpp \
+    FilteredContent.cpp
 
 HEADERS  += MainWindow.h \
     CommandLineInput.h \
     Highlighter.h \
-    SimpleStyleMarker.h
+    SimpleStyleMarker.h \
+    FilteredContent.h

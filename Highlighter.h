@@ -9,11 +9,14 @@ namespace linae {
 
 class Highlighter : public QSyntaxHighlighter
 {
+    Q_OBJECT
+
 public:
     Highlighter(QTextDocument* parent = nullptr);
 
 public slots:
     void addMarked(const QString& text, int style);
+    void setSelected(const QString& text);
 
 protected:
     void highlightBlock(const QString &text) override;
@@ -21,6 +24,9 @@ protected:
 private:
     QVector<QTextCharFormat> markerStyles;
     QVector<QVector<QString>> markers;
+
+    QString selected;
+    QTextCharFormat selectedStyle;
 
     void setUpMarkerStyles();
 };

@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "FilteredContent.h"
+
 #include <QMainWindow>
 
 class QTextEdit;
@@ -23,19 +25,33 @@ public slots:
 
     void noop();
 
-    void filterSelected();
+    void leaveFilter() {
+        useFilter(FilteredContent::FilterType::HideNotContaining);
+    }
+
+    void hideFilter() {
+        useFilter(FilteredContent::FilterType::HideContaining);
+    }
+
+    void showFilter() {
+        useFilter(FilteredContent::FilterType::ShowContaining);
+    }
+
+    void useFilter(FilteredContent::FilterType type);
+
     void resetFiltering();
+
 protected:
-    void setOriginalContent(const QString& original);
-    void setContent(const QString& original);
+    void updateContent();
+
+    QString getFilter() const;
 
 private:
     void setUpFileMenu();
     void setUpViewer();
     void setUpToolbar();
 
-    QString original;
-    QString content;
+    FilteredContent content;
 
     QTextEdit *textView;
 
