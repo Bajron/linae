@@ -5,7 +5,7 @@
 
 #include <QMainWindow>
 
-class QTextEdit;
+class QPlainTextEdit;
 
 namespace linae {
 
@@ -53,7 +53,7 @@ private:
 
     FilteredContent content;
 
-    QTextEdit *textView;
+    QPlainTextEdit *textView;
 
     void setUpHighlighter();
     void setUpStyleMarker();

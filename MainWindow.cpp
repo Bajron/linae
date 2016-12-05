@@ -6,7 +6,7 @@
 #include <QMenu>
 #include <QKeySequence>
 #include <QFileDialog>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QApplication>
 #include <QClipboard>
 #include <QToolBar>
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setUpFileMenu();
     setUpToolbar();
 
-    connect(textView, &QTextEdit::selectionChanged, styleMarker, &SimpleStyleMarker::selected);
+    connect(textView, &QPlainTextEdit::selectionChanged, styleMarker, &SimpleStyleMarker::selected);
 
     setCentralWidget(textView);
     setWindowTitle(tr("linae"));
@@ -77,11 +77,13 @@ void MainWindow::resetFiltering() {
 }
 
 void MainWindow::updateContent() {
-    textView->setText(content.getContent());
+    textView->setPlainText(content.getContent());
 
     auto c = textView->textCursor();
     c.setPosition(content.getAbsoluteCursor());
     textView->setTextCursor(c);
+
+    qDebug() << "Block count " << textView->document()->blockCount();
 }
 
 QString MainWindow::getFilter() const {
@@ -116,11 +118,18 @@ void MainWindow::setUpViewer() {
     font.setFixedPitch(true);
     font.setPointSize(10);
 
-    textView = new QTextEdit(this);
+    textView = new QPlainTextEdit(this);
     textView->setFont(font);
     textView->setPlainText("Open log...");
     textView->setReadOnly(true);
     textView->setTextInteractionFlags(textView->textInteractionFlags() | Qt::TextSelectableByKeyboard);
+    textView->document()->setDefaultFont(font);
+    textView->document()->setUseDesignMetrics(true);
+    QTextOption option;
+    option.setWrapMode(QTextOption::NoWrap);
+    option.setAlignment(Qt::AlignLeft);
+    option.setUseDesignMetrics(true);
+    textView->document()->setDefaultTextOption(option);
 }
 
 void MainWindow::setUpToolbar() {

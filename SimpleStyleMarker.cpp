@@ -1,7 +1,7 @@
 #include "SimpleStyleMarker.h"
 #include "Highlighter.h"
 
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QDebug>
 
 namespace linae {
@@ -17,7 +17,7 @@ void SimpleStyleMarker::setHighlighter(Highlighter *h) {
     highlighter = h;
 }
 
-void SimpleStyleMarker::observe(QTextEdit *te) {
+void SimpleStyleMarker::observe(QPlainTextEdit *te) {
     observedText = te;
 }
 

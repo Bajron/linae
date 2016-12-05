@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-class QTextEdit;
+class QPlainTextEdit;
 
 
 namespace linae {
@@ -18,7 +18,7 @@ public:
 
     void setHighlighter(Highlighter* highlighter);
 
-    void observe(QTextEdit* text);
+    void observe(QPlainTextEdit* text);
 
 signals:
 
@@ -34,7 +34,7 @@ public slots:
 
 private:
     Highlighter* highlighter;
-    QTextEdit* observedText;
+    QPlainTextEdit* observedText;
 };
 
 }
