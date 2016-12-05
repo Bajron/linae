@@ -55,6 +55,13 @@ private:
     QString content;
 
     struct Cursor {
+        Cursor(const int absolute, const int inLine, const int line)
+            : absolute(absolute), inLine(inLine), line(line)
+        {
+        }
+
+        Cursor() = default;
+
         int absolute = 0;
         int inLine = 0;
         int line = 0;
